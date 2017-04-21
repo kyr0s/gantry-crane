@@ -1,0 +1,28 @@
+gravatar:
+  enabled: true
+
+delete:
+  enabled: true
+
+check_ssl_usage:
+  enabled: false
+
+registry:
+  jwt_expiration_time:
+    value: 10
+
+machine_fqdn:
+  value: "{{registry-ui-fqdn}}"
+
+display_name:
+  enabled: true
+
+user_permission:
+  change_visibility:
+    enabled: false
+
+  manage_team:
+    enabled: true
+
+  manage_namespace:
+    enabled: true

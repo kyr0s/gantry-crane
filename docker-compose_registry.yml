@@ -1,0 +1,77 @@
+version: "3"
+
+services:
+
+  portainer:
+    restart: always
+    image: portainer/portainer
+    environment:
+      VIRTUAL_HOST: {{portainer-fqdn}}}
+      LETSENCRYPT_HOST: {{portainer-fqdn}}
+      LETSENCRYPT_EMAIL: {{cert-owner-email}}
+    volumes:
+      - {{data-root}}/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - web
+
+  registry:
+    restart: always
+    image: registry:2
+    environment:
+      VIRTUAL_HOST: {{registry-fqdn}}
+      LETSENCRYPT_HOST: {{registry-fqdn}}
+      LETSENCRYPT_EMAIL: {{cert-owner-email}}
+    volumes:
+      - {{data-root}}/registry/data:/var/lib/registry
+      - {{data-root}}/registry/config.yml:/etc/docker/registry/config.yml
+      - {{data-root}}/certs:/data/certs:ro
+    networks: 
+      - web
+
+  portus-db:
+    restart: always
+    image: mariadb:10
+    environment:
+      - MYSQL_DATABASE=portus
+      - MYSQL_USER=portus
+      - MYSQL_PASSWORD=portus
+      - MYSQL_ROOT_PASSWORD=portus
+    volumes:
+      - {{data-root}}/mariadb/portus:/var/lib/mysql
+    networks:
+      - registry-backend
+
+  portus:
+    restart: always
+    image: opensuse/portus:head
+    environment:
+      VIRTUAL_HOST: {{registry-ui-fqdn}}
+      LETSENCRYPT_HOST: {{registry-ui-fqdn}}
+      LETSENCRYPT_EMAIL: kyros@bk.ru
+      PORTUS_KEY_PATH: /secrets/{{registry-ui-fqdn}}.key
+      PORTUS_PRODUCTION_HOST: portus-db
+      PORTUS_PRODUCTION_USERNAME: portus
+      PORTUS_PRODUCTION_PASSWORD: portus
+      PORTUS_PRODUCTION_DATABASE: portus
+      PORTUS_SECRET_KEY_BASE: {{portus-secret-key-base}}
+      PORTUS_PASSWORD: {{portus-password}}
+      RAILS_SERVE_STATIC_FILES: "true"
+      PORTUS_PUMA_WORKERS: 10
+      PORTUS_PUMA_MAX_THREADS: 50
+    volumes:
+      - {{data-root}}/portus/config-local.yml:/srv/Portus/config/config-local.yml
+      - {{data-root}}/certs/{{registry-ui-fqdn}}.crt:/certificates/{{registry-ui-fqdn}}.crt
+      - {{data-root}}/certs/{{registry-ui-fqdn}}.key:/secrets/{{registry-ui-fqdn}}.key
+    networks:
+      - web
+      - registry-backend
+    depends_on:
+      - portus-db
+
+networks:
+  web:
+    external:
+      name: {{nginx-proxy-network}}
+  registry-backend:
+    driver: bridge
