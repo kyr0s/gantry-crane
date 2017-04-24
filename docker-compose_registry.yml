@@ -6,7 +6,7 @@ services:
     restart: always
     image: portainer/portainer
     environment:
-      VIRTUAL_HOST: {{portainer-fqdn}}}
+      VIRTUAL_HOST: {{portainer-fqdn}}
       LETSENCRYPT_HOST: {{portainer-fqdn}}
       LETSENCRYPT_EMAIL: {{cert-owner-email}}
     volumes:
