@@ -47,22 +47,19 @@ PORTUS_PASSWORD=$(openssl rand -hex 64)
 
 rm -rf $DATA_ROOT
 
-mkdir $DATA_ROOT
-mkdir $DATA_ROOT/templates
-mkdir $DATA_ROOT/certs
-mkdir $DATA_ROOT/mariadb
-mkdir $DATA_ROOT/nginx
-mkdir $DATA_ROOT/nginx/certs
-mkdir $DATA_ROOT/nginx/conf.d
-mkdir $DATA_ROOT/nginx/html
-mkdir $DATA_ROOT/nginx/templates
-mkdir $DATA_ROOT/nginx/vhost.d
-mkdir $DATA_ROOT/portainer
-mkdir $DATA_ROOT/portus
-mkdir $DATA_ROOT/registry
-mkdir $DATA_ROOT/compose
-mkdir $DATA_ROOT/compose/nginx
-mkdir $DATA_ROOT/compose/registry
+mkdir -p $DATA_ROOT/templates
+mkdir -p $DATA_ROOT/certs
+mkdir -p $DATA_ROOT/mariadb
+mkdir -p $DATA_ROOT/nginx/certs
+mkdir -p $DATA_ROOT/nginx/conf.d
+mkdir -p $DATA_ROOT/nginx/html
+mkdir -p $DATA_ROOT/nginx/templates
+mkdir -p $DATA_ROOT/nginx/vhost.d
+mkdir -p $DATA_ROOT/portainer
+mkdir -p $DATA_ROOT/portus
+mkdir -p $DATA_ROOT/registry
+mkdir -p $DATA_ROOT/compose/nginx
+mkdir -p $DATA_ROOT/compose/registry
 
 # Copying template for processing
 cp docker-compose_nginx.yml $DATA_ROOT/templates/docker-compose_nginx.yml
