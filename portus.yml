@@ -26,3 +26,21 @@ user_permission:
 
   manage_namespace:
     enabled: true
+
+ldap:
+  enabled: false
+  hostname: "dc.example.local"
+  port: 389
+  method: "plain"
+  base: "OU=Staff,DC=example,DC=local"
+  filter: "(objectClass=user)"
+  uid: "samAccountName"
+
+  authentication:
+    enabled: true
+    bind_dn: "CN=ldap_user,CN=Users,DC=example,dc=local"
+    password: "super_secure_password"
+
+  guess_email:
+    enabled: true
+    attr: "mail"
