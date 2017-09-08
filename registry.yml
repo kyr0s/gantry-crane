@@ -7,6 +7,14 @@ storage:
     enabled: true
   cache:
     blobdescriptor: inmemory
+  maintenance:
+    uploadpurging:
+      enabled: true
+      age: 72h
+      interval: 12h
+      dryrun: false
+    readonly:
+      enabled: false
 http:
   addr: :5000
   host: https://{{registry-fqdn}}
